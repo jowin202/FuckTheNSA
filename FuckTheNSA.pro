@@ -10,7 +10,10 @@ QMAKE_CXXFLAGS += -DNDEBUG -g2 -O3 -fPIC -pthread -pipe
 
 
 # fallback for windows because ...
-win32{ QMAKE_CXXFLAGS += -DCRYPTOPP_DISABLE_ASM }
+win32{
+#QMAKE_CXXFLAGS += -DCRYPTOPP_DISABLE_ASM
+QMAKE_CXXFLAGS += /arch:SSE2 /arch:SSE3 /arch:SSE4.1 /arch:SSE4.2 /arch:AVX /arch:AVX2 /arch:AES /arch:PCLMUL
+}
 
 
 CONFIG(debug, debug|release) {
