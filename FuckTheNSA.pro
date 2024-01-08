@@ -5,12 +5,15 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 CONFIG += c++11
 
 # run this optimizations on linux
-linux-g++{ QMAKE_CXXFLAGS += -mssse3 -msse4.1 -msse4.2 -mpclmul -msse2 -mavx2 -maes -msha }
+#linux-g++{ QMAKE_CXXFLAGS += -mssse3 -msse4.1 -msse4.2 -mpclmul -msse2 -mavx2 -maes -msha }
 
 QMAKE_CXXFLAGS += -DNDEBUG -g2 -O3 -fPIC -pthread -pipe
 
+# add optimizations for all plattforms (hope this will work)
+QMAKE_CXXFLAGS += -mssse3 -msse4.1 -msse4.2 -mpclmul -msse2 -mavx2 -maes -msha
+
 # fallback for windows because ...
-win32{ QMAKE_CXXFLAGS += -DCRYPTOPP_DISABLE_ASM }
+# win32{ QMAKE_CXXFLAGS += -DCRYPTOPP_DISABLE_ASM }
 
 
 CONFIG(debug, debug|release) {
