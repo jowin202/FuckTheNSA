@@ -27,6 +27,7 @@ CONFIG(debug, debug|release) {
 
 SOURCES += \
     cipher.cpp \
+    createtar.cpp \
     cryptopp/3way.cpp \
     cryptopp/adler32.cpp \
     cryptopp/algebra.cpp \
@@ -215,10 +216,12 @@ SOURCES += \
     cryptopp/zlib.cpp \
     main.cpp \
     mainwindow.cpp \
+    microtar/src/microtar.c \
     optionwindow.cpp
 
 HEADERS += \
     cipher.h \
+    createtar.h \
     cryptopp/3way.h \
     cryptopp/adhoc.cpp.proto \
     cryptopp/adler32.h \
@@ -413,6 +416,7 @@ HEADERS += \
     cryptopp/zinflate.h \
     cryptopp/zlib.h \
     mainwindow.h \
+    microtar/src/microtar.h \
     optionwindow.h
 
 FORMS += \

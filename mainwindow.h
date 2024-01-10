@@ -9,6 +9,7 @@
 
 #include <QSettings>
 
+#include <QTemporaryFile>
 #include <QFileInfo>
 #include <QProcess>
 #include <QMimeData>

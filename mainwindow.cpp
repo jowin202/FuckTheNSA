@@ -3,6 +3,7 @@
 
 #include "cipher.h"
 #include "optionwindow.h"
+#include "createtar.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -56,6 +57,10 @@ void MainWindow::dropEvent(QDropEvent *event)
         QFileInfo f(file_path);
         if (f.isDir())
         {
+            CreateTar *createtar = new CreateTar(file_path);
+            connect(createtar, &CreateTar::finished, this, [=](){ this->setEnabled(true); });
+            createtar->start();
+            this->setEnabled(false);
 
         }
         else

@@ -206,7 +206,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1" colspan="2">
+         <item row="0" column="1">
           <widget class="QLineEdit" name="line_file_in">
            <property name="text">
             <string>/tmp/CryptoBox.dat</string>
