@@ -7,6 +7,14 @@
 #include <QJsonArray>
 #include <QJsonValue>
 
+#include <QSettings>
+
+#include <QFileInfo>
+#include <QProcess>
+#include <QMimeData>
+#include <QDragEnterEvent>
+#include <QProgressDialog>
+
 #include <QDebug>
 
 QT_BEGIN_NAMESPACE
@@ -21,18 +29,26 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-
     QJsonArray invert_context(QJsonArray ctx);
 
+
+public slots:
+    void dragEnterEvent(QDragEnterEvent *event) {
+            event->acceptProposedAction();
+    }
+    void dropEvent(QDropEvent *event);
 
 private slots:
     void on_button_encrypt_clicked();
     void on_button_decrypt_clicked();
     void update_gui(int percent);
 
+    void on_actionOptions_triggered();
+
 private:
     Ui::MainWindow *ui;
 
+    QSettings settings;
     QJsonArray cipher_ctx;
 };
 #endif // MAINWINDOW_H

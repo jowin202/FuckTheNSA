@@ -10,6 +10,9 @@
     <height>645</height>
    </rect>
   </property>
+  <property name="acceptDrops">
+   <bool>true</bool>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
@@ -103,7 +106,7 @@
          <item row="1" column="0">
           <widget class="QLabel" name="label">
            <property name="text">
-            <string>AES-256-CFB which is sufficient in most of the cases</string>
+            <string>AES-256-CFB which is sufficient for most of the cases</string>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -170,7 +173,7 @@
     <item row="0" column="0">
      <widget class="QGroupBox" name="groupBox_3">
       <property name="title">
-       <string>GroupBox</string>
+       <string>Input File</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_7">
        <item row="0" column="0">
@@ -253,8 +256,20 @@
      <height>30</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionOptions"/>
+   </widget>
+   <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionOptions">
+   <property name="text">
+    <string>Options</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

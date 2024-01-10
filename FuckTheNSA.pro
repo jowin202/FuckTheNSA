@@ -214,7 +214,8 @@ SOURCES += \
     cryptopp/zinflate.cpp \
     cryptopp/zlib.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    optionwindow.cpp
 
 HEADERS += \
     cipher.h \
@@ -411,10 +412,12 @@ HEADERS += \
     cryptopp/zdeflate.h \
     cryptopp/zinflate.h \
     cryptopp/zlib.h \
-    mainwindow.h
+    mainwindow.h \
+    optionwindow.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    optionwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

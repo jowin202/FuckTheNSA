@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include "cipher.h"
+#include "optionwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -18,7 +19,6 @@ MainWindow::MainWindow(QWidget *parent)
     QJsonArray cipher1;
     cipher1 << "Serpent" << "OFB" << "ENC" << "6d75cb3cb688a091aeae77b1a09524c951ce2391dccbeda2164de3b321c62146" << "875c1cecd99c6e138e38589c42d29130dd40759c67e2284591dba6d2ea42b559";
     cipher_ctx << cipher1 << cipher2 << cipher3 << cipher4;
-
 }
 
 MainWindow::~MainWindow()
@@ -47,6 +47,22 @@ QJsonArray MainWindow::invert_context(QJsonArray ctx)
     return ctx2;
 }
 
+void MainWindow::dropEvent(QDropEvent *event)
+{
+    const QMimeData* mimeData = event->mimeData();
+    if (mimeData->hasUrls() && mimeData->urls().length() == 1)
+    {
+        QString file_path = mimeData->urls().at(0).toLocalFile();
+        QFileInfo f(file_path);
+        if (f.isDir())
+        {
+
+        }
+        else
+            this->ui->line_file_in->setText(file_path);
+    }
+}
+
 
 void MainWindow::on_button_encrypt_clicked()
 {
@@ -68,5 +84,12 @@ void MainWindow::on_button_decrypt_clicked()
 void MainWindow::update_gui(int percent)
 {
     this->ui->progressBar->setValue(percent);
+}
+
+
+void MainWindow::on_actionOptions_triggered()
+{
+    OptionWindow *options = new OptionWindow;
+    options->show();
 }
 
