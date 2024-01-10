@@ -37,6 +37,7 @@ public slots:
             event->acceptProposedAction();
     }
     void dropEvent(QDropEvent *event);
+    void updateOutputFile();
 
 private slots:
     void on_button_encrypt_clicked();

@@ -63,6 +63,14 @@ void MainWindow::dropEvent(QDropEvent *event)
     }
 }
 
+void MainWindow::updateOutputFile()
+{
+    if (this->ui->check_update_output->isChecked())
+    {
+        this->ui->line_file_out->setText(this->ui->line_file_in->text() + ".fnsa");
+    }
+}
+
 
 void MainWindow::on_button_encrypt_clicked()
 {

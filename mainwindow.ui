@@ -178,17 +178,17 @@
       <layout class="QGridLayout" name="gridLayout_7">
        <item row="0" column="0">
         <layout class="QGridLayout" name="gridLayout_6">
-         <item row="0" column="1">
-          <widget class="QLineEdit" name="line_file_in">
-           <property name="text">
-            <string>/tmp/CryptoBox.dat</string>
-           </property>
-          </widget>
-         </item>
          <item row="1" column="0">
           <widget class="QLabel" name="label_6">
            <property name="text">
             <string>File Output:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="line_file_out">
+           <property name="text">
+            <string>/tmp/CryptoBox.dat.enc</string>
            </property>
           </widget>
          </item>
@@ -199,10 +199,17 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="line_file_out">
+         <item row="1" column="2">
+          <widget class="QCheckBox" name="check_update_output">
            <property name="text">
-            <string>/tmp/CryptoBox.dat.enc</string>
+            <string>auto update</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1" colspan="2">
+          <widget class="QLineEdit" name="line_file_in">
+           <property name="text">
+            <string>/tmp/CryptoBox.dat</string>
            </property>
           </widget>
          </item>
@@ -272,5 +279,25 @@
   </action>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>line_file_in</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>updateOutputFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>179</x>
+     <y>89</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>3</x>
+     <y>59</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>updateOutputFile()</slot>
+ </slots>
 </ui>
