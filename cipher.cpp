@@ -79,7 +79,6 @@ void Cipher::run()
         QString enc_dec = current_cipher.at(2).toString();
         QByteArray key  = QByteArray::fromHex(current_cipher.at(3).toString().toUtf8());
         QByteArray iv  = QByteArray::fromHex(current_cipher.at(4).toString().toUtf8());
-        qDebug() << iv.toHex();
 
         CryptoPP::StreamTransformationFilter *filter = 0;
 
@@ -444,12 +443,14 @@ void Cipher::run()
         MeterFilter meter = MeterFilter( new Redirector(file_sink) );
         previous_filter->Attach(new Redirector(meter));
 
-        while (!file_source->SourceExhausted() && meter.GetTotalBytes() < (unsigned int)size)
+        //while (!file_source->SourceExhausted())// && meter.GetTotalBytes() < (unsigned int)size)
+        while(!file_source->GetStream()->eof())
         {
             file_source->Pump(65536);
             emit progress( qRound( meter.GetTotalBytes()/(1.0*size) * 100) );
         }
     }
+    qDebug() << "finished";
 
 }
 
