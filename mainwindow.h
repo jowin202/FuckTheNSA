@@ -30,7 +30,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    QJsonArray invert_context(QJsonArray ctx);
+
 
 
 public slots:

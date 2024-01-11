@@ -1,23 +1,76 @@
 #include "cipher.h"
 
-Cipher::Cipher(QString file_from, QString file_to, QJsonArray ctx) : QThread()
+Cipher::Cipher(QString file_from, QString file_to, QJsonArray ctx, bool encrypt) : QThread()
 {
     this->file_from = file_from;
     this->file_to = file_to;
-    this->ctx = ctx;
+    if (encrypt)
+        this->ctx = ctx;
+    else
+        this->ctx = this->invert_context(ctx);
+
+    this->encrypt = encrypt;
 }
 
 void Cipher::run()
 {
     using namespace CryptoPP;
-
     QFile f(this->file_from);
     size = f.size();
-
 
     CryptoPP::FileSource *file_source = new FileSource(this->file_from.toStdString().data(), false);
 
     CryptoPP::StreamTransformationFilter *previous_filter = 0;
+    CryptoPP::StreamTransformationFilter *first_filter = 0;
+
+
+    QByteArray iv;
+    if (encrypt)
+    {
+        for (int i = 0; i < ctx.count(); i++)
+        {
+            QJsonArray current_cipher = ctx.at(i).toArray();
+            QString cipher  = current_cipher.at(0).toString();
+            QString mode    = current_cipher.at(1).toString();
+            QString enc_dec = current_cipher.at(2).toString();
+            QByteArray key  = QByteArray::fromHex(current_cipher.at(3).toString().toUtf8());
+
+                size_t iv_size = 16; //16 byte block length
+                if (cipher == "Threefish1024")
+                    iv_size = 128; //1024 bit block len for threefish1024
+                byte iv_tmp[128];
+                CryptoPP::OS_GenerateRandomBlock(false,iv_tmp,iv_size);
+                iv = QByteArray(reinterpret_cast<char*>(iv_tmp),iv_size);
+                this->IVs.append(iv);
+                current_cipher.append(QString(iv.toHex()));
+                ctx.removeAt(i);
+                ctx.insert(i,current_cipher);
+        }
+    }
+    else
+    {
+        for (int i = ctx.count()-1; i >= 0; i--)
+        {
+            QJsonArray current_cipher = ctx.at(i).toArray();
+            QString cipher  = current_cipher.at(0).toString();
+            QString mode    = current_cipher.at(1).toString();
+            QString enc_dec = current_cipher.at(2).toString();
+            QByteArray key  = QByteArray::fromHex(current_cipher.at(3).toString().toUtf8());
+            size_t iv_size = 16; //16 byte block length
+            if (cipher == "Threefish1024")
+                iv_size = 128; //1024 bit block len for threefish1024
+            std::string iv_tmp;
+            file_source->Attach(new StringSink(iv_tmp));
+            file_source->Pump(iv_size);
+            iv = QByteArray(iv_tmp.data(),iv_tmp.size());
+            this->IVs.append(iv);
+            current_cipher.append(QString(iv.toHex()));
+            ctx.removeAt(i);
+            ctx.insert(i,current_cipher);
+        }
+    }
+
+
     for (int i = 0; i < ctx.count(); i++)
     {
         QJsonArray current_cipher = ctx.at(i).toArray();
@@ -25,7 +78,8 @@ void Cipher::run()
         QString mode    = current_cipher.at(1).toString();
         QString enc_dec = current_cipher.at(2).toString();
         QByteArray key  = QByteArray::fromHex(current_cipher.at(3).toString().toUtf8());
-        QByteArray iv   = QByteArray::fromHex(current_cipher.at(4).toString().toUtf8());
+        QByteArray iv  = QByteArray::fromHex(current_cipher.at(4).toString().toUtf8());
+        qDebug() << iv.toHex();
 
         CryptoPP::StreamTransformationFilter *filter = 0;
 
@@ -372,26 +426,51 @@ void Cipher::run()
 
 
         if (i == 0)
-            file_source->Attach(filter);
+            first_filter = filter;
         else
             previous_filter->Attach(filter);
 
         previous_filter = filter;
     }
 
-    CryptoPP::FileSink *file_sink = new CryptoPP::FileSink(this->file_to.toStdString().data());
+    file_source->Attach(first_filter);
+    CryptoPP::FileSink file_sink(this->file_to.toStdString().data());
+
+    if (encrypt) //Attach IVs when encrypt
+        StringSource(IVs.toStdString(),true, new Redirector(file_sink));
+
     if (previous_filter != 0)
     {
-        MeterFilter *meter = new MeterFilter( file_sink );
-        previous_filter->Attach(meter);
+        MeterFilter meter = MeterFilter( new Redirector(file_sink) );
+        previous_filter->Attach(new Redirector(meter));
 
-        while (!file_source->SourceExhausted() && meter->GetTotalBytes() < (unsigned int)size)
+        while (!file_source->SourceExhausted() && meter.GetTotalBytes() < (unsigned int)size)
         {
             file_source->Pump(65536);
-            emit progress( qRound( meter->GetTotalBytes()/(1.0*size) * 100) );
+            emit progress( qRound( meter.GetTotalBytes()/(1.0*size) * 100) );
         }
-
     }
 
+}
+
+QJsonArray Cipher::invert_context(QJsonArray ctx)
+{
+    QJsonArray ctx2;
+    for (int i = 0; i < ctx.count(); i++)
+    {
+        QJsonArray cipher = ctx.at(i).toArray();
+        if (cipher.at(2).toString() == "ENC")
+        {
+            cipher.removeAt(2);
+            cipher.insert(2,"DEC");
+        }
+        else if (cipher.at(2).toString() == "DEC")
+        {
+            cipher.removeAt(2);
+            cipher.insert(2,"ENC");
+        }
+        ctx2.prepend(cipher);
+    }
+    return ctx2;
 }
 
