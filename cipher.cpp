@@ -450,7 +450,6 @@ void Cipher::run()
             emit progress( qRound( meter.GetTotalBytes()/(1.0*size) * 100) );
         }
     }
-    qDebug() << "finished";
 
 }
 

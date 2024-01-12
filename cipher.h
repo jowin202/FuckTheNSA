@@ -10,6 +10,8 @@
 
 #include <iostream>
 
+#include "cryptopp/channels.h"
+#include "cryptopp/hmac.h"
 #include "cryptopp/osrng.h"
 #include "cryptopp/filters.h"
 #include "cryptopp/files.h"

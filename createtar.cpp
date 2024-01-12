@@ -12,7 +12,7 @@ CreateTar::CreateTar(QString dir, QObject *parent)
 
 void CreateTar::processDirectory(QString abs_path, QString rel_path) {
     QDir directory(abs_path + QDir::separator() + rel_path);
-    mtar_write_dir_header(&tar, rel_path.toStdString().data());
+    mtar_write_dir_header(&tar, rel_path.replace(QDir::separator(),"/").toStdString().data());
 
     QFileInfoList entries = directory.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
     foreach (const QFileInfo &entry, entries) {
@@ -22,7 +22,7 @@ void CreateTar::processDirectory(QString abs_path, QString rel_path) {
             QString rel_file_path = rel_path + entry.fileName();
             QFile f(abs_path + QDir::separator() + rel_file_path);
             f.open(QIODevice::ReadOnly);
-            mtar_write_file_header(&tar, rel_file_path.toStdString().data(), f.size());
+            mtar_write_file_header(&tar, rel_file_path.replace(QDir::separator(),"/").toStdString().data(), f.size());
             while (!f.atEnd())
             {
                 len = f.read(buffer, 1024);
