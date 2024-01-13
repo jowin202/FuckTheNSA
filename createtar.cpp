@@ -1,6 +1,5 @@
 #include "createtar.h"
 
-#include <unistd.h>
 
 CreateTar::CreateTar(QString dir, QObject *parent)
     : QThread{parent}
