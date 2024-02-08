@@ -17,6 +17,7 @@
 #include <QProgressDialog>
 
 #include <QDebug>
+#include <QRandomGenerator64>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

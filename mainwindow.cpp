@@ -4,6 +4,7 @@
 #include "cipher.h"
 #include "optionwindow.h"
 #include "createtar.h"
+#include "tpmkeygen.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -20,6 +21,12 @@ MainWindow::MainWindow(QWidget *parent)
     QJsonArray cipher1;
     cipher1 << "Serpent" << "OFB" << "ENC" << "6d75cb3cb688a091aeae77b1a09524c951ce2391dccbeda2164de3b321c62146";
     cipher_ctx << cipher1 << cipher2 << cipher3 << cipher4;
+
+    QByteArray keydata(256, '\0');
+    for (int i = 0; i < keydata.count(); ++i) {
+        keydata[i] = 0x33;
+    }
+    TPMKeyGen *tpm = new TPMKeyGen(keydata);
 }
 
 MainWindow::~MainWindow()

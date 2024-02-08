@@ -1,0 +1,72 @@
+/*
+  Fuck The NSA
+*/
+
+#include <SE05X.h>
+
+const int bufferSize = 256;
+byte receivedData[bufferSize];
+byte processedData[bufferSize];
+int dataIndex = 0;
+
+
+const int AES_KEY_1 = 666;
+const int AES_KEY_2 = 667;
+const int AES_KEY_3 = 668;
+const int AES_KEY_4 = 669;
+const int AES_KEY_5 = 670;
+const int AES_KEY_6 = 671;
+const int AES_KEY_7 = 672;
+const int AES_KEY_8 = 673;
+const int HMAC_KEY_1 = 674;
+const int HMAC_KEY_2 = 675;
+const int HMAC_KEY_3 = 676;
+const int HMAC_KEY_4 = 677;
+
+
+void setup() {
+  Serial.begin(9600);
+  while (!Serial);
+
+  if (!SE05X.begin()) {
+    Serial.println("Error with secure element");
+    while(1);
+  }
+
+}
+
+void loop() {
+    if (Serial.available() > 0) {
+    // Read the incoming byte
+    receivedData[dataIndex] = Serial.read();
+    dataIndex++;
+
+    // Check if 256 bytes have been received
+    if (dataIndex == bufferSize) {
+      // Perform your operation on the received data
+
+      size_t len;
+      SE05X.AES_ECB_encrypt(AES_KEY_1, receivedData+16*0, 16, processedData+16*0, &len);
+      SE05X.AES_ECB_encrypt(AES_KEY_2, receivedData+16*1, 16, processedData+16*1, &len);
+      SE05X.AES_ECB_encrypt(AES_KEY_3, receivedData+16*2, 16, processedData+16*2, &len);
+      SE05X.AES_ECB_encrypt(AES_KEY_4, receivedData+16*3, 16, processedData+16*3, &len);
+      SE05X.AES_ECB_encrypt(AES_KEY_5, receivedData+16*4, 16, processedData+16*4, &len);
+      SE05X.AES_ECB_encrypt(AES_KEY_6, receivedData+16*5, 16, processedData+16*5, &len);
+      SE05X.AES_ECB_encrypt(AES_KEY_7, receivedData+16*6, 16, processedData+16*6, &len);
+      SE05X.AES_ECB_encrypt(AES_KEY_8, receivedData+16*7, 16, processedData+16*7, &len);
+
+
+      SE05X.HMAC_Generate(HMAC_KEY_1, kSE05x_MACAlgo_HMAC_SHA512, receivedData+16*8,    64, processedData+16*8,    &len);
+      SE05X.HMAC_Generate(HMAC_KEY_2, kSE05x_MACAlgo_HMAC_SHA512, receivedData+16*8+64, 64, processedData+16*8+64, &len);
+
+      for (int i = 0; i < bufferSize; i++) {
+        Serial.write(processedData[i]);
+      }
+
+
+      // Reset index for the next set of data
+      dataIndex = 0;
+    }
+  }
+
+}

@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -219,7 +219,8 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     microtar/src/microtar.c \
-    optionwindow.cpp
+    optionwindow.cpp \
+    tpmkeygen.cpp
 
 HEADERS += \
     cipher.h \
@@ -419,7 +420,8 @@ HEADERS += \
     cryptopp/zlib.h \
     mainwindow.h \
     microtar/src/microtar.h \
-    optionwindow.h
+    optionwindow.h \
+    tpmkeygen.h
 
 FORMS += \
     mainwindow.ui \

@@ -1,6 +1,11 @@
 #ifndef OPTIONWINDOW_H
 #define OPTIONWINDOW_H
 
+
+//sudo apt-get install libqt6serialport6-dev
+#include <QSerialPort>
+#include <QSerialPortInfo>
+
 #include <QWidget>
 #include <QKeyEvent>
 #include <QSettings>
@@ -27,6 +32,8 @@ public:
 private slots:
     void on_button_ok_clicked();
     void on_button_cancel_clicked();
+
+    void save_settings();
 
 private:
     Ui::OptionWindow *ui;
