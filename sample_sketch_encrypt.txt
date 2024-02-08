@@ -23,6 +23,13 @@ const int HMAC_KEY_2 = 675;
 const int HMAC_KEY_3 = 676;
 const int HMAC_KEY_4 = 677;
 
+void print_hex(const byte in[], size_t len) {
+  for (size_t i = 0; i < len; i++) {
+    Serial.print(in[i] >> 4, HEX);
+    Serial.print(in[i] & 0x0f, HEX);
+  }
+  Serial.print("\n");
+}
 
 void setup() {
   Serial.begin(9600);
@@ -56,17 +63,20 @@ void loop() {
       SE05X.AES_ECB_encrypt(AES_KEY_8, receivedData+16*7, 16, processedData+16*7, &len);
 
 
+      len = 64;
       SE05X.HMAC_Generate(HMAC_KEY_1, kSE05x_MACAlgo_HMAC_SHA512, receivedData+16*8,    64, processedData+16*8,    &len);
       SE05X.HMAC_Generate(HMAC_KEY_2, kSE05x_MACAlgo_HMAC_SHA512, receivedData+16*8+64, 64, processedData+16*8+64, &len);
 
-      for (int i = 0; i < bufferSize; i++) {
-        Serial.write(processedData[i]);
-      }
-
+      print_hex(processedData,256);
 
       // Reset index for the next set of data
       dataIndex = 0;
     }
+    else
+    {
+      Serial.print("in ");
+      Serial.print(dataIndex);
+      Serial.print("\n");
+    }
   }
-
 }

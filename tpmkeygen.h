@@ -17,6 +17,8 @@ class TPMKeyGen : public QObject
 public:
     TPMKeyGen(QByteArray data);
 
+signals:
+    void key_generation_finished(QByteArray key);
 
 private:
     QSerialPort port;
