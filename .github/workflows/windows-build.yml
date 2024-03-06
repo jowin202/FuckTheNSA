@@ -4,11 +4,10 @@ on:
   push:
     branches:
       - main
-      - cicd
 
 env:
   QT_VERSION: 6.5.0
-  AQT_PLATFORM: msvc2019_64
+  AQT_PLATFORM: mingw_64
   ARCHIVE_NAME: FuckTheNSA-win-amd64-latest
 
 jobs:
