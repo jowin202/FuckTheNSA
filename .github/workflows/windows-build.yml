@@ -7,7 +7,7 @@ on:
 
 env:
   QT_VERSION: 6.5.0
-  AQT_PLATFORM: mingw810
+  AQT_PLATFORM: mingw53
   ARCHIVE_NAME: FuckTheNSA-win-amd64-latest
 
 jobs:
@@ -42,7 +42,7 @@ jobs:
       run: |
         Write-Host 'Installing Qt ...'
         #aqt list-qt windows desktop --arch $Env:QT_VERSION
-        aqt install-qt windows desktop $Env:QT_VERSION "win64_${Env:AQT_PLATFORM}" -m qtserialport -O C:\Qt
+        aqt install-qt windows desktop $Env:QT_VERSION "win32_${Env:AQT_PLATFORM}" -m qtserialport -O C:\Qt
 
     - name: Run qmake
       run: |
